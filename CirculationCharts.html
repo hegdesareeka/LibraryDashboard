@@ -218,13 +218,13 @@
 		window.print();
 	}
 
-	//var dataTable = dc.dataTable("#dc-table-graph");
+	var dataTable = dc.dataTable("#dc-table-graph");
 	var magnitudeChart = dc.barChart("#dc-magnitude-chart");
-	//var magnitudeChart1 = dc.barChart("#dc-magnitude-chart1");
-	//var magnitudeChart2 = dc.barChart("#dc-magnitude-chart2");
-	// var monthUsage = dc.rowChart("#dc-usage-chart");
+	var magnitudeChart1 = dc.barChart("#dc-magnitude-chart1");
+	var magnitudeChart2 = dc.barChart("#dc-magnitude-chart2");
+	//var monthUsage = dc.rowChart("#dc-usage-chart");
 	var chart = dc.pieChart("#dc-pie-chart");
-	//var chart1 = dc.pieChart("#dc-pie-chart1");
+	var chart1 = dc.pieChart("#dc-pie-chart1");
 
 	d3.csv("test.csv", function(data) {
 
@@ -249,8 +249,7 @@
 		chart.width(470).height(380).slicesCap(3).innerRadius(100).dimension(
 				yearDimension).group(ipadSumGroup).legend(dc.legend());
 
-		/* /* chart.width(568).height(380).slicesCap(3).innerRadius(100).dimension(
-				yearDimension).group(ipadSumGroup).legend(dc.legend());
+
 
 		runDimension1 = facts.dimension(function(d) {
 			return d.mon
@@ -258,7 +257,7 @@
 		speedSumGroup1 = runDimension1.group().reduceSum(function(d) {
 			return d.ipad
 		})
-		chart1.width(568).height(380).slicesCap(12).innerRadius(100).dimension(
+		chart1.width(470).height(380).slicesCap(12).innerRadius(100).dimension(
 				runDimension1).group(speedSumGroup1).legend(dc.legend());
 
 		var lapValue1 = facts.dimension(function(d) {
@@ -269,13 +268,13 @@
 			return d.year;
 		})
 
-		magnitudeChart2.width(480).height(150).margins({
+		magnitudeChart2.width(400).height(150).margins({
 			top : 10,
 			right : 10,
 			bottom : 20,
 			left : 40
-		}).dimension(lapValue1).group(lapValueCount1).transitionDuration(500)
-				.centerBar(true).gap(65).filter([ 3, 5 ]).x(
+		}).dimension(yearDimension).group(lapValueCount1).transitionDuration(500)
+				.centerBar(true).x(
 						d3.scale.linear().domain([ 0, 500 ])).elasticY(true)
 				.xAxis().tickFormat();
 
@@ -287,15 +286,15 @@
 			return d.year;
 		})
 
-		magnitudeChart1.width(480).height(150).margins({
+		magnitudeChart1.width(400).height(150).margins({
 			top : 10,
 			right : 10,
 			bottom : 20,
 			left : 40
-		}).dimension(lapValue).group(lapValueCount).transitionDuration(500)
-				.centerBar(true).gap(65).filter([ 3, 5 ]).x(
-						d3.scale.linear().domain([ 0, 500 ])).elasticY(true)
-				.xAxis().tickFormat();
+		}).dimension(yearDimension).group(ipadSumGroup).transitionDuration(500)
+				.centerBar(true).x(
+						d3.scale.linear().domain([ 2010,2017])).elasticY(true)
+				.xAxis();
 
 		var magValue = facts.dimension(function(d) {
 			return d.ipad;
@@ -308,7 +307,7 @@
 		var timeDimension = facts.dimension(function(d) {
 			return d.year;
 
-		}) */ 
+		})
 		
 		  magnitudeChart
 		    .width(400)
@@ -326,7 +325,7 @@
 		    });
 
 
-/* 		dataTable.width(960).height(800).dimension(timeDimension).group(
+ 		dataTable.width(960).height(800).dimension(timeDimension).group(
 				function(d) {
 					return "Usage Table"
 				}).size(40)
@@ -345,7 +344,7 @@
 
 		.sortBy(function(d) {
 			return d.mon;
-		}).order(d3.ascending); */
+		}).order(d3.ascending); 
 		dc.renderAll();
 
 	});
