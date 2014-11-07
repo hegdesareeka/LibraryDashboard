@@ -142,11 +142,9 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="flot-chart">
-                                <div class="flot-chart-content" id="dc-magnitude-chart"></div>
-                                <div class="flot-chart-content" id="dc-magnitude-chart1"></div>
-                                <div class="flot-chart-content" id="dc-magnitude-chart2"></div>
-
-
+                                <div class="flot-chart-content" style = "height:50%" id="dc-magnitude-chart"></div>
+                                <div class="flot-chart-content" style = "height:50%" id="dc-magnitude-chart1"></div>
+                                <div class="flot-chart-content" style = "height:50%" id="dc-magnitude-chart2"></div>
                             </div>
                         </div>
                         <!-- /.panel-body -->
@@ -163,8 +161,8 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="flot-chart">
-                                <div class="flot-chart-content" id="dc-pie-chart"></div>
-                                <div class="flot-chart-content" id="dc-pie-chart1"></div>
+                                <div class="flot-chart-content" style = "height:70%" id="dc-pie-chart"></div>
+                                <div class="flot-chart-content"  style = "height:70%" id="dc-pie-chart1"></div>
 
                             </div>
                         </div>
@@ -246,7 +244,7 @@
 			return d.ipad;
 		});
 		
-		chart.width(470).height(380).slicesCap(3).innerRadius(100).dimension(
+		chart.width(360).height(250).slicesCap(3).innerRadius(40).dimension(
 				yearDimension).group(ipadSumGroup).legend(dc.legend());
 
 
@@ -257,7 +255,7 @@
 		speedSumGroup1 = runDimension1.group().reduceSum(function(d) {
 			return d.ipad
 		})
-		chart1.width(470).height(380).slicesCap(12).innerRadius(100).dimension(
+		chart1.width(360).height(250).slicesCap(12).innerRadius(40).dimension(
 				runDimension1).group(speedSumGroup1).legend(dc.legend());
 
 		var lapValue1 = facts.dimension(function(d) {
@@ -311,7 +309,7 @@
 		
 		  magnitudeChart
 		    .width(400)
-		    .height(400)
+		    .height(150)
 		    .x(d3.scale.linear().domain([2010,2017]))
 		    .brushOn(false)
 		    .yAxisLabel("iPad Usage")
