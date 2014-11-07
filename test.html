@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Data (Library Reports) Visualization</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href="css/plugins/timeline.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="css/plugins/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+     <script type="text/javascript" src="js/d3.js"></script>
+        <script type="text/javascript" src="js/crossfilter.js"></script>
+        <script type="text/javascript" src="js/dc.js"></script>
+        <script type="text/javascript"  src="js/jquery.min.js"></script>
+        
+
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/dc.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+</head>
+<body>
+<div id="dc-magnitude-chart"></div>
+</body>
+<script>
+
+	function myFunction() {
+		window.print();
+	}
+
+	//var dataTable = dc.dataTable("#dc-table-graph");
+	var magnitudeChart = dc.barChart("#dc-magnitude-chart");
+	
+	d3.csv("test.csv", function(data) {
+
+		data.forEach(function(d) {
+
+			d.mon = d.Month;
+			d.year = d.Year;
+			d.head = d.headphonevga;
+			d.lap = d.Laptopusage;
+			d.ipad = +d.iPadusage;
+		});
+
+		var facts = crossfilter(data);
+
+		yearDimension = facts.dimension(function(d) {
+			return d.year;
+		})
+		ipadSumGroup = yearDimension.group().reduceSum(function(d) {
+			return d.ipad;
+		});
+		var formatxAxis = d3.format('.0f');
+		
+		  magnitudeChart
+		    .width(400)
+		    .height(500)
+		    .x(d3.scale.linear().domain([2010,2017]))
+		    .brushOn(false)
+		    .yAxisLabel("This is the Y Axis!")
+		    .dimension(yearDimension)
+		    .group(ipadSumGroup)
+		    .renderlet(function(magnitudeChart) {
+		        magnitudeChart.selectAll('rect').on("click", function(d) {
+		            console.log("click!", d);
+		        });
+		    });
+		  dc.renderAll();
+
+	});
+</script>
+
+</html>
