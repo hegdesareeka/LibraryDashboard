@@ -3,34 +3,49 @@
 <head>
     <title>dc.js - Series Example</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
+    
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/dc.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
 
 <div id="test"></div>
-<button onclick="button1()">1</button>
-<button onclick="button2()">2</button>
-<button onclick="button3()">3</button>
 
-<script type="text/javascript" src="../js/d3.js"></script>
-<script type="text/javascript" src="../js/crossfilter.js"></script>
-<script type="text/javascript" src="../js/dc.js"></script>
+<script type="text/javascript" src="js/d3.js"></script>
+        <script type="text/javascript" src="js/crossfilter.js"></script>
+        <script type="text/javascript" src="js/dc.js"></script>
+        <script type="text/javascript"  src="js/jquery.min.js"></script>
+        
+
 <script type="text/javascript">
 
 var chart = dc.seriesChart("#test");
-var ndx, runDimension, runGroup;
+var  runDimension, runGroup;
 
-d3.csv("morley.csv", function(error, experiments) {
+d3.csv("studenthall.csv", function(error, data) {
 
-  ndx = crossfilter(experiments);
-  runDimension = ndx.dimension(function(d) {return [+d.Expt, +d.Run]; });
-  runGroup = runDimension.group().reduceSum(function(d) { return +d.Speed; });
+ data.forEach(function(d) {
+
+            
+            d.date = d.StartDate.split('-')[1]
+            d.date1 = d.StartDate.split('-')[2]
+            d.patrons = d.Id
+        });
+
+        var facts = crossfilter(data);
+
+
+
+  runDimension = facts.dimension(function(d) {return [+d.date1, +d.date]; });
+  runGroup = runDimension.group().reduceCount(function(d) { return +d.patrons; });
 
   chart
     .width(768)
     .height(480)
     .chart(function(c) { return dc.lineChart(c).interpolate('basis'); })
-    .x(d3.scale.linear().domain([0,20]))
+    .x(d3.scale.ordinal().domain(["Jan", "Feb", "Mar" ,"Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"])) 
+            .xUnits(dc.units.ordinal)
     .brushOn(false)
     .yAxisLabel("Measured Speed km/s")
     .xAxisLabel("Run")
@@ -39,30 +54,16 @@ d3.csv("morley.csv", function(error, experiments) {
     .dimension(runDimension)
     .group(runGroup)
     .mouseZoomable(true)
-    .seriesAccessor(function(d) {return "Expt: " + d.key[0];})
+    .seriesAccessor(function(d) {return "Year: " + d.key[0];})
     .keyAccessor(function(d) {return +d.key[1];})
-    .valueAccessor(function(d) {return +d.value - 500;})
+    .valueAccessor(function(d) {return +d.value;})
     .legend(dc.legend().x(350).y(350).itemHeight(13).gap(5).horizontal(1).legendWidth(140).itemWidth(70));
-  chart.yAxis().tickFormat(function(d) {return d3.format(',d')(d+299500);});
+  chart.yAxis().tickFormat(function(d) {return d3.format(',d')(d);});
   chart.margins().left += 40;
 
   dc.renderAll();
 
 });
-
-function load_button(file) {
-    return function load_it() {
-        d3.csv(file, function(error, experiments) {
-            ndx.remove();
-            ndx.add(experiments);
-            dc.redrawAll();
-        });
-    };
-}
-
-var button1 = load_button("morley.csv"),
-    button2 = load_button("morley2.csv"),
-    button3 = load_button("morley3.csv");
 
 </script>
 

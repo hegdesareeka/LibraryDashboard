@@ -1,4 +1,4 @@
-Month,Year,Laptopusage,iPadusage,No of materials previewed,No of reshelved items not on loan,No of hours library staffed,No of general loans,No of reserve loans,No of holds,No of materials transferred,No of materials returned,No of person passing turnstile,headphonevga
+Month,Year,Laptopusage,iPadusage,No of materials previewed,No of reshelved items not on loan,No of hours library staffed,Noofgeneralloans,Noofreserveloans,No of holds,Noofmaterialstransferred,No of materials returned,No of person passing turnstile,headphonevga
 Jan,2011,32,4,23,670,265,701,90,61,600,1238,9624,96
 Feb,2011,90,5,31,489,313,1245,331,60,555,1567,27020,105
 Mar,2011,105,24,12,417,326,983,272,39,468,1359,24499,38

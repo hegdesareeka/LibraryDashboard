@@ -17,14 +17,11 @@
     <!-- MetisMenu CSS -->
     <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 
-    <!-- Timeline CSS -->
-    <link href="css/plugins/timeline.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="css/plugins/dataTables.bootstrap.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
-    <link href="css/plugins/morris.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -35,7 +32,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-     <script type="text/javascript" src="js/d3.js"></script>
+    <script type="text/javascript" src="js/d3.js"></script>
         <script type="text/javascript" src="js/crossfilter.js"></script>
         <script type="text/javascript" src="js/dc.js"></script>
         <script type="text/javascript"  src="js/jquery.min.js"></script>
@@ -49,10 +46,9 @@
 
 <body>
 
-    <div id="wrapper">
+      <div id="wrapper">
 
-        <!-- Navigation -->
-         <!-- Navigation -->
+       <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -61,7 +57,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html"> <b>Data(Library Reports) Visualization </b></a>
+                <a class="navbar-brand" href="LibraryDashboard.html"> <b>Data(Library Reports) Visualization </b></a>
             </div>
             <!-- /.navbar-header -->
 
@@ -82,15 +78,17 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a class="active" href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-
+                            <a class="active" href="LibraryDashboard.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
 
                         <li>
-                            <a href="index.html"><i class="fa fa-bar-chart-o fa-fw"></i> Library Circulation Desk<span class="fa arrow"></span></a>
+                            <a href="LibraryDashboard.html"><i class="fa fa-bar-chart-o fa-fw"></i> Library Circulation Desk<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
+                                    <a href="DeviceUsageChart.html"><i class="fa fa-bar-chart-o fa-fw"></i> Device Usage</a>
+                                </li>
+                                 <li>
+                                    <a href="LoanUsageChart.html"><i class="fa fa-bar-chart-o fa-fw"></i> Loan Usage</a>
                                 </li>
                                 <li>
                                     <a href="CirculationTable.html"><i class="fa fa-table fa-fw"></i>Tables</a>
@@ -210,143 +208,178 @@
         </div>
     
 </div>
-<script>
+    <script>
 
-	function myFunction() {
-		window.print();
-	}
+    function myFunction() {
+        window.print();
+    }
 
-	var dataTable = dc.dataTable("#dc-table-graph");
-	var magnitudeChart = dc.barChart("#dc-magnitude-chart");
-	var magnitudeChart1 = dc.barChart("#dc-magnitude-chart1");
-	var magnitudeChart2 = dc.barChart("#dc-magnitude-chart2");
-	//var monthUsage = dc.rowChart("#dc-usage-chart");
-	var chart = dc.pieChart("#dc-pie-chart");
-	var chart1 = dc.pieChart("#dc-pie-chart1");
+    var dataTable = dc.dataTable("#dc-table-graph");
+    var magnitudeChart = dc.barChart("#dc-magnitude-chart");
+    var magnitudeChart1 = dc.barChart("#dc-magnitude-chart1");
+    var magnitudeChart2 = dc.barChart("#dc-magnitude-chart2");
+    //var monthUsage = dc.rowChart("#dc-usage-chart");
+    var chart = dc.pieChart("#dc-pie-chart");
+    var chart1 = dc.pieChart("#dc-pie-chart1");
 
-	d3.csv("test.csv", function(data) {
+    d3.csv("test.csv", function(data) {
 
-		data.forEach(function(d) {
+        data.forEach(function(d) {
 
-			d.mon = d.Month;
-			d.year = d.Year;
-			d.head = d.headphonevga;
-			d.lap = d.Laptopusage;
-			d.ipad = d.iPadusage;
-		});
+            d.mon = d.Month;
+            d.year = d.Year;
+            d.head = d.headphonevga;
+            d.lap = d.Laptopusage;
+            d.ipad = d.iPadusage;
+        });
 
-		var facts = crossfilter(data);
+        var facts = crossfilter(data);
 
-		yearDimension = facts.dimension(function(d) {
-			return d.year;
-		})
-		ipadSumGroup = yearDimension.group().reduceSum(function(d) {
-			return d.ipad;
-		});
-		
-		chart.width(360).height(250).slicesCap(3).innerRadius(40).dimension(
-				yearDimension).group(ipadSumGroup).legend(dc.legend());
+        yearDimension = facts.dimension(function(d) {
+            return d.year;
+        })
 
 
-
-		runDimension1 = facts.dimension(function(d) {
-			return d.mon
-		})
-		speedSumGroup1 = runDimension1.group().reduceSum(function(d) {
-			return d.ipad
-		})
-		chart1.width(360).height(250).slicesCap(12).innerRadius(40).dimension(
-				runDimension1).group(speedSumGroup1).legend(dc.legend());
-
-		var lapValue1 = facts.dimension(function(d) {
-			return d.head;
-		})
-
-		var lapValueCount1 = lapValue1.group().reduceCount(function(d) {
-			return d.year;
-		})
-
-		magnitudeChart2.width(400).height(150).margins({
-			top : 10,
-			right : 10,
-			bottom : 20,
-			left : 40
-		}).dimension(yearDimension).group(lapValueCount1).transitionDuration(500)
-				.centerBar(true).x(
-						d3.scale.linear().domain([ 0, 500 ])).elasticY(true)
-				.xAxis().tickFormat();
-
-		var lapValue = facts.dimension(function(d) {
-			return d.lap;
-		})
-
-		var lapValueCount = lapValue.group().reduceCount(function(d) {
-			return d.year;
-		})
-
-		magnitudeChart1.width(400).height(150).margins({
-			top : 10,
-			right : 10,
-			bottom : 20,
-			left : 40
-		}).dimension(yearDimension).group(ipadSumGroup).transitionDuration(500)
-				.centerBar(true).x(
-						d3.scale.linear().domain([ 2010,2017])).elasticY(true)
-				.xAxis();
-
-		var magValue = facts.dimension(function(d) {
-			return d.ipad;
-		})
-
-		var magValueCount = magValue.group().reduceCount(function(d) {
-			return d.year;
-		})
-
-		var timeDimension = facts.dimension(function(d) {
-			return d.year;
-
-		})
-		
-		  magnitudeChart
-		    .width(400)
-		    .height(150)
-		    .x(d3.scale.linear().domain([2010,2017]))
-		    .brushOn(false)
-		    .yAxisLabel("iPad Usage")
-		    .dimension(yearDimension)
-		    .group(ipadSumGroup)
-		    .renderlet(function(magnitudeChart) {
-		        magnitudeChart.selectAll('rect').on("click", function(d) {
-		            chart.filter(d.x);
-		            dc.redrawAll();
-		        });
-		    });
+        monDimension = facts.dimension(function(d) {
+            return d.mon
+        })
 
 
- 		dataTable.width(960).height(800).dimension(timeDimension).group(
-				function(d) {
-					return "Usage Table"
-				}).size(40)
+        ipadSumYear = yearDimension.group().reduceSum(function(d) {
+            return d.ipad;
+        });
+        
+        ipadSumMon = monDimension.group().reduceSum(function(d) {
+            return d.ipad;
+        });
+        
 
-		.columns([ function(d) {
-			return d.mon
-		}, function(d) {
-			return d.year
-		}, function(d) {
-			return d.head
-		}, function(d) {
-			return d.lap
-		}, function(d) {
-			return d.ipad
-		} ])
 
-		.sortBy(function(d) {
-			return d.mon;
-		}).order(d3.ascending); 
-		dc.renderAll();
+        chart.width(360).height(250).slicesCap(3).innerRadius(40).dimension(
+                yearDimension).group(ipadSumYear).legend(dc.legend());
 
-	});
+
+        chart1.width(360).height(250).slicesCap(12).innerRadius(40).dimension(
+                monDimension).group(ipadSumMon).legend(dc.legend());
+
+        
+       
+        
+       
+        headphoneSumYear = yearDimension.group().reduceSum(function(d) {
+            return d.head;
+        });
+
+        laptopSumYear= yearDimension.group().reduceSum(function(d) {
+            return d.lap;
+        });
+
+     
+      
+
+        magnitudeChart2
+            .width(400)
+            .height(150)
+            .x(d3.scale.linear().domain([2010,2017]))
+            .brushOn(false)
+            .yAxisLabel("Headphone Usage ")
+            .dimension(yearDimension)
+            .group(headphoneSumYear)
+            .renderlet(function(magnitudeChart2) {
+                magnitudeChart2.selectAll('rect').on("click", function(d) {
+                    chart.filter(d.x);
+                    dc.redrawAll();
+                });
+            });
+
+
+        magnitudeChart1
+            .width(400)
+            .height(150)
+            .x(d3.scale.linear().domain([2010,2017]))
+            .brushOn(false)
+            .yAxisLabel("Laptop Usage")
+            .dimension(yearDimension)
+            .group(laptopSumYear)
+            .renderlet(function(magnitudeChart1) {
+                magnitudeChart1.selectAll('rect').on("click", function(d) {
+                    chart.filter(d.x);
+                    dc.redrawAll();
+                });
+            });
+
+   
+
+       
+        
+          magnitudeChart
+            .width(400)
+            .height(150)
+            .x(d3.scale.linear().domain([2010,2017]))
+            .brushOn(false)
+            .yAxisLabel("iPad Usage")
+            .dimension(yearDimension)
+            .group(ipadSumYear)
+            .renderlet(function(magnitudeChart) {
+                magnitudeChart.selectAll('rect').on("click", function(d) {
+                    chart.filter(d.x);
+                    dc.redrawAll();
+                });
+            });
+
+
+        dataTable.width(960).height(800).dimension(yearDimension).group(
+                function(d) {
+                    return "Usage Table"
+                }).size(40)
+
+        .columns([ function(d) {
+            return d.mon
+        }, function(d) {
+            return d.year
+        }, function(d) {
+            return d.head
+        }, function(d) {
+            return d.lap
+        }, function(d) {
+            return d.ipad
+        } ])
+
+        .sortBy(function(d) {
+            return d.mon;
+        }).order(d3.ascending); 
+        dc.renderAll();
+
+    });
 </script>
+
+
+    </script>
+    <!-- /#wrapper -->
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="js/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="js/plugins/metisMenu/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/sb-admin-2.js"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
 </body>
 
 </html>
