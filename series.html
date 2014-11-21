@@ -20,9 +20,55 @@
 
 <script type="text/javascript">
 
-var chart = dc.seriesChart("#test");
+var lineChart1 = dc.compositeChart("#test");
 var  runDimension, runGroup;
+var experiments = [
+                   { Run: 1, Age_19_Under: 26.9, Age_19_64: 62.3, Age_65_84: 9.8, Age_85_and_Over: 0.9 },
+                   { Run: 2, Age_19_Under: 23.5, Age_19_64: 60.3, Age_65_84: 14.5, Age_85_and_Over: 1.8 },
+                   { Run: 3, Age_19_Under: 24.3, Age_19_64: 62.5, Age_65_84: 11.6, Age_85_and_Over: 1.6 },
+                   { Run: 4, Age_19_Under: 24.6, Age_19_64: 63.3, Age_65_84: 10.9, Age_85_and_Over: 1.2 },
+                   { Run: 5, Age_19_Under: 24.5, Age_19_64: 62.1, Age_65_84: 12.1, Age_85_and_Over: 1.3 },
+                   { Run: 6, Age_19_Under: 24.7, Age_19_64: 63.2, Age_65_84: 10, Age_85_and_Over: 2.2 },
+                   { Run: 7, Age_19_Under: 25.6, Age_19_64: 58.5, Age_65_84: 13.6, Age_85_and_Over: 2.4 },
+                   { Run: 8, Age_19_Under: 24.1, Age_19_64: 61.6, Age_65_84: 12.7, Age_85_and_Over: 1.5 },
+                   { Run: 9, Age_19_Under: 24.8, Age_19_64: 59.5, Age_65_84: 13.5, Age_85_and_Over: 2.2 },
+               ];
 
+               var ndx = crossfilter(experiments);
+               var all = ndx.groupAll();
+
+               var runDimension = ndx.dimension(function (d) { return d.Run; });
+
+               var age19UnderGroup = runDimension.group().reduceSum(function (d) { return d.Age_19_Under; });
+               var age19To64Group = runDimension.group().reduceSum(function (d) { return d.Age_19_64; });
+               var age65To84Group = runDimension.group().reduceSum(function (d) { return d.Age_65_84; });
+               var age85AndOverGroup = runDimension.group().reduceSum(function (d) { return d.Age_85_and_Over; });
+
+               lineChart1.width(1160)
+                   .height(250)
+                   .margins({ top: 10, right: 10, bottom: 20, left: 40 })
+                   .dimension(runDimension)
+                   .transitionDuration(500)
+                   .elasticY(true)
+                   .brushOn(false)
+                   .valueAccessor(function (d) {
+                       return d.value;
+                   })
+                   .title(function (d) {
+                       return "\nNumber of Povetry: " + d.key;
+
+                   })
+                   .x(d3.scale.linear().domain([4, 27]))
+                   .compose([
+                       dc.lineChart(lineChart1).group(age19UnderGroup),
+                       dc.lineChart(lineChart1).group(age19To64Group),
+                       dc.lineChart(lineChart1).group(age65To84Group),
+                       dc.lineChart(lineChart1).group(age85AndOverGroup)
+                   ])
+               ;
+
+               dc.renderAll();
+/*
 d3.csv("studenthall.csv", function(error, data) {
 
  data.forEach(function(d) {
@@ -65,6 +111,45 @@ d3.csv("studenthall.csv", function(error, data) {
 
 });
 
+d3.csv("studenthall.csv", function(error, data) {
+	
+	  ndx = crossfilter(data);
+	  data.forEach(function(d) {
+
+          
+          d.date = "JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(d.StartDate.split('-')[1]) / 3 + 1;
+          d.date1 = d.StartDate.split('-')[2];
+          d.month = d.StartDate.split('-')[1];
+          d.patrons = d.Id;
+      });
+	  runDimension = ndx.dimension(function(d) {return [d.date1, d.month]; });
+	  runGroup = runDimension.group().reduceCount(function(d) { return d.patrons; });
+
+	  chart
+	    .width(768)
+	    .height(480)
+	    .chart(function(c) { return dc.lineChart(c).interpolate('basis'); })
+	    .x(d3.scale.ordinal()) 
+            .xUnits(dc.units.ordinal)
+	    .brushOn(false)
+	    .yAxisLabel("Measured Speed km/s")
+	    .xAxisLabel("Run")
+	    .clipPadding(10)
+	    .elasticY(true)
+	    .dimension(runDimension)
+	    .group(runGroup)
+	    .mouseZoomable(true)
+	    .seriesAccessor(function(d) {return "Year: 20" + d.key[0];})
+	    .keyAccessor(function(d) {return d.key[1];})
+	    .valueAccessor(function(d) {return d.value ;})
+	    .legend(dc.legend().x(350).y(350).itemHeight(13).gap(5).horizontal(1).legendWidth(140).itemWidth(70));
+	  chart.yAxis().tickFormat(function(d) {return d3.format(',d')(d);});
+	  chart.margins().left += 40;
+
+	  dc.renderAll();
+
+	});
+*/
 </script>
 
 </body>
