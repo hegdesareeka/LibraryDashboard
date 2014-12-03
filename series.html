@@ -21,33 +21,62 @@
 <script type="text/javascript">
 
 var lineChart1 = dc.compositeChart("#test");
-var  runDimension, runGroup;
-var experiments = [
-                   { Run: 1, Age_19_Under: 26.9, Age_19_64: 62.3, Age_65_84: 9.8, Age_85_and_Over: 0.9 },
-                   { Run: 2, Age_19_Under: 23.5, Age_19_64: 60.3, Age_65_84: 14.5, Age_85_and_Over: 1.8 },
-                   { Run: 3, Age_19_Under: 24.3, Age_19_64: 62.5, Age_65_84: 11.6, Age_85_and_Over: 1.6 },
-                   { Run: 4, Age_19_Under: 24.6, Age_19_64: 63.3, Age_65_84: 10.9, Age_85_and_Over: 1.2 },
-                   { Run: 5, Age_19_Under: 24.5, Age_19_64: 62.1, Age_65_84: 12.1, Age_85_and_Over: 1.3 },
-                   { Run: 6, Age_19_Under: 24.7, Age_19_64: 63.2, Age_65_84: 10, Age_85_and_Over: 2.2 },
-                   { Run: 7, Age_19_Under: 25.6, Age_19_64: 58.5, Age_65_84: 13.6, Age_85_and_Over: 2.4 },
-                   { Run: 8, Age_19_Under: 24.1, Age_19_64: 61.6, Age_65_84: 12.7, Age_85_and_Over: 1.5 },
-                   { Run: 9, Age_19_Under: 24.8, Age_19_64: 59.5, Age_65_84: 13.5, Age_85_and_Over: 2.2 },
-               ];
+   d3.csv("studenthall.csv", function(data) {
 
-               var ndx = crossfilter(experiments);
-               var all = ndx.groupAll();
 
-               var runDimension = ndx.dimension(function (d) { return d.Run; });
 
-               var age19UnderGroup = runDimension.group().reduceSum(function (d) { return d.Age_19_Under; });
-               var age19To64Group = runDimension.group().reduceSum(function (d) { return d.Age_19_64; });
-               var age65To84Group = runDimension.group().reduceSum(function (d) { return d.Age_65_84; });
-               var age85AndOverGroup = runDimension.group().reduceSum(function (d) { return d.Age_85_and_Over; });
+       // parseDate = d3.time.format("%d-%m-%Y").parse
+
+        //var dtgFormat = d3.time.format("%b");
+
+        data.forEach(function(d) {
+
+            
+            d.date = d.StartDate.split('-')[1]
+            d.date1 = d.StartDate.split('-')[2]
+            d.patrons = d.Id
+        });
+
+        var facts = crossfilter(data);
+
+        monDimension = facts.dimension(function(d) {
+            return d.date;
+        })
+        numofPatrons = monDimension.group().reduceCount(function(d) {
+            return d.patrons;
+        });
+        
+        
+          yearDimension = facts.dimension(function(d) {
+            return d.date1;
+        })
+
+          numofPatrons1 = yearDimension.group().reduceCount(function(d) { if (d.date1 == "2013")
+            return d.patrons;
+        });
+
+          numofPatrons2 = yearDimension.group().reduceSum(function(d) { if (d.date1 == "2012")
+            return d.patrons;
+        });
+     
+          numofPatrons3 = yearDimension.group().reduceSum(function(d) { if (d.date1 == "2011")
+            return d.patrons;
+        });
+
+
+          group1 = monDimension.group().reduceCount(function(d) { return numofPatrons1;
+        });
+
+          group2 = monDimension.group().reduceCount(function(d) { return numofPatrons2;
+        });
+
+          group3 = monDimension.group().reduceCount(function(d) { return numofPatrons3;
+        });
 
                lineChart1.width(1160)
                    .height(250)
                    .margins({ top: 10, right: 10, bottom: 20, left: 40 })
-                   .dimension(runDimension)
+                   .dimension(monDimension)
                    .transitionDuration(500)
                    .elasticY(true)
                    .brushOn(false)
@@ -58,12 +87,12 @@ var experiments = [
                        return "\nNumber of Povetry: " + d.key;
 
                    })
-                   .x(d3.scale.linear().domain([4, 27]))
+                   .x(d3.scale.linear().domain([0,12]))
                    .compose([
-                       dc.lineChart(lineChart1).group(age19UnderGroup),
-                       dc.lineChart(lineChart1).group(age19To64Group),
-                       dc.lineChart(lineChart1).group(age65To84Group),
-                       dc.lineChart(lineChart1).group(age85AndOverGroup)
+                       dc.lineChart(lineChart1).group(group1),
+                       dc.lineChart(lineChart1).group(group2),
+                       dc.lineChart(lineChart1).group(group3),
+                  
                    ])
                ;
 
@@ -147,9 +176,9 @@ d3.csv("studenthall.csv", function(error, data) {
 	  chart.margins().left += 40;
 
 	  dc.renderAll();
-
-	});
 */
+	});
+
 </script>
 
 </body>

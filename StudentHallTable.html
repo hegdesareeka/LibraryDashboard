@@ -46,10 +46,10 @@
 
 <body>
 
-      <div id="wrapper">
+    <div id="wrapper">
 
        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+       <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -178,18 +178,6 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Library Instruction <span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>                                
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-table fa-fw"></i>Tables</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
                        
                     </ul>
                 </div>
@@ -197,254 +185,110 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
         <div id="page-wrapper">
-                    <div class="row">
-                         <div class="col-lg-12">
-                         <h1 class="page-header">Equipment Usage &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="myFunction()" class="btn btn-success" role="button">Print this page</button>
- </h1>
-
-                        </div>
-                <!-- /.col-lg-12 -->
-                     </div>
-
-                    <div class="row">
-
-                  
-                     
-
-                     <div class="col-lg-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Number of Laptops, Headphones and iPads loaned per year
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="flot-chart" style = "width:20%">
-                                <div class="flot-chart-content" style = "height:50%" id="dc-magnitude-chart"></div>
-                                <div class="flot-chart-content" style = "height:50%" id="dc-magnitude-chart1"></div>
-                                <div class="flot-chart-content" style = "height:50%" id="dc-magnitude-chart2"></div>
-                            </div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-
-
-                     <div class="col-lg-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Yearly and Monthly Usage 
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="flot-chart">
-                                <div class="flot-chart-content" style = "height:70%" id="dc-pie-chart"></div>
-                                <div class="flot-chart-content"  style = "height:70%" id="dc-pie-chart1"></div>
-
-                            </div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-
-
-                
-
-               
-            </div>
-      
-        
             <div class="row">
-            <div class="col-lg-12">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Tables</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Selected Data
+                            DataTables Advanced Tables
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                             <table class='table table-hover' id='dc-table-graph'>
-                    <thead>
-                        <tr class='header'>
-                            <th> Month </th>
-                            <th> Year </th>
-                            <th> HeadphoneVgaetc  </th>
-                            <th> Laptopusage </th>
-                            <th> iPadusage </th>
-                        </tr>
-
-
-                    </thead>
-
-                </table>
-
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id='dc-table-graph'>
+                                    <thead>
+                                        <thead>
+                                        <tr class='header'>
+                                            <th> Start Date </th>
+                                            <th> End Date </th>
+                                          
+                                        </tr>
+                                    </thead>
+                                    
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                            
                         </div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
                 </div>
+                <!-- /.col-lg-12 -->
             </div>
+          
+         
         </div>
-        <div id="footer">
+        <!-- /#page-wrapper -->
+  <div id="footer">
       <div class="container">
         <p class="muted credit">Developed By: Sarika S. Hegde</a> </p>
       </div>
     </div>
-
-    
-</div>
+    </div>
     <script>
 
-    function myFunction() {
-        window.print();
-    }
 
-    var dataTable = dc.dataTable("#dc-table-graph");
-    var magnitudeChart = dc.barChart("#dc-magnitude-chart");
-    var magnitudeChart1 = dc.barChart("#dc-magnitude-chart1");
-    var magnitudeChart2 = dc.barChart("#dc-magnitude-chart2");
-    //var monthUsage = dc.rowChart("#dc-usage-chart");
-    var chart = dc.pieChart("#dc-pie-chart");
-    var chart1 = dc.pieChart("#dc-pie-chart1");
+        var dataTable = dc.dataTable("#dc-table-graph");
 
-    d3.csv("test.csv", function(data) {
+       d3.csv("studenthall.csv", function(data) {
+
+
+
+       // parseDate = d3.time.format("%d-%m-%Y").parse
+
+        //var dtgFormat = d3.time.format("%b");
 
         data.forEach(function(d) {
 
-            d.mon = d.Month;
-            d.year = d.Year;
-            d.head = d.headphonevga;
-            d.lap = d.Laptopusage;
-            d.ipad = d.iPadusage;
+            d.startDate = d.StartDate;
+            d.endDate =d.EndDate;
+
+
         });
 
         var facts = crossfilter(data);
 
-        yearDimension = facts.dimension(function(d) {
-            return d.year;
-        })
-
-
         monDimension = facts.dimension(function(d) {
-            return d.mon
+            return d.date;
+        })
+        numofPatrons = monDimension.group().reduceCount(function(d) {
+            return d.patrons;
+        });
+        
+          yearDimension = facts.dimension(function(d) {
+            return d.date1;
         })
 
 
-        ipadSumYear = yearDimension.group().reduceSum(function(d) {
-            return d.ipad;
-        });
-        
-        ipadSumMon = monDimension.group().reduceSum(function(d) {
-            return d.ipad;
-        });
-        
+        dataTable.width(960).height(800)
+          .dimension(monDimension)
+            .group(function(d){
+            return "Usage Table"
+            }
+        )
+        .size(40)
 
+        .columns([
+            function(d) {return d.startDate},
+            function(d){return d.endDate}
+          
+            ])
 
-        chart.width(360).height(250).slicesCap(3).innerRadius(20).dimension(
-                yearDimension).group(ipadSumYear).legend(dc.legend());
-
-
-        chart1.width(360).height(250).slicesCap(12).dimension(
-                monDimension).group(ipadSumMon).legend(dc.legend());
-
-        
-       
-        
-       
-        headphoneSumYear = yearDimension.group().reduceSum(function(d) {
-            return d.head;
-        });
-
-        laptopSumYear= yearDimension.group().reduceSum(function(d) {
-            return d.lap;
-        });
-
-     
-      
-
-        magnitudeChart2
-            .width(400)
-            .height(150)
-            //.x(d3.scale.linear().domain([2010,2017]))
-            .x(d3.scale.ordinal()) 
-            .xUnits(dc.units.ordinal)
-            .brushOn(false)
-            .yAxisLabel("      Headphone Usage ") 
-            .dimension(yearDimension)
-            .group(headphoneSumYear)
-            .renderlet(function(magnitudeChart2) {
-                magnitudeChart2.selectAll('rect').on("click", function(d) {
-                    chart.filter(d.x);
-                    dc.redrawAll();
-                });
-            });
-
-
-        magnitudeChart1
-            .width(400)
-            .height(150)
-            //.x(d3.scale.linear().domain([2010,2017]))
-            .x(d3.scale.ordinal()) 
-            .xUnits(dc.units.ordinal)
-            .brushOn(false)
-            .yAxisLabel("Laptop Usage")
-            .dimension(yearDimension)
-            .group(laptopSumYear)
-            .renderlet(function(magnitudeChart1) {
-                magnitudeChart1.selectAll('rect').on("click", function(d) {
-                    chart.filter(d.x);
-                    dc.redrawAll();
-                });
-            });
-
-   
-
-       
-        
-          magnitudeChart
-            .width(400)
-            .height(150)
-            //.x(d3.scale.linear().domain([2010,2017]))
-            .x(d3.scale.ordinal()) 
-            .xUnits(dc.units.ordinal)
-            .brushOn(false)
-            .yAxisLabel("iPad Usage")
-            .dimension(yearDimension)
-            .group(ipadSumYear)
-            .renderlet(function(magnitudeChart) {
-                magnitudeChart.selectAll('rect').on("click", function(d) {
-                    chart.filter(d.x);
-                    dc.redrawAll();
-                });
-            });
-
-
-        dataTable.width(960).height(800).dimension(yearDimension).group(
-                function(d) {
-                    return "Usage Table"
-                }).size(40)
-
-        .columns([ function(d) {
-            return d.mon
-        }, function(d) {
-            return d.year
-        }, function(d) {
-            return d.head
-        }, function(d) {
-            return d.lap
-        }, function(d) {
-            return d.ipad
-        } ])
-
-        .sortBy(function(d) {
-            return d.mon;
-        }).order(d3.ascending); 
+    .sortBy(function(d){return d.startDate;})
+    .order(d3.ascending);
         dc.renderAll();
 
-    });
-</script>
+
+        });
+
 
 
     </script>

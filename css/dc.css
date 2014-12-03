@@ -315,3 +315,9 @@ div.dc-chart {
     pointer-events: all;
     cursor: pointer;
 }
+
+.chart-body g.axis.x {
+
+    transform: translate(52px,100px);
+}
+

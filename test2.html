@@ -149,13 +149,6 @@
                     <!-- /.panel -->
                 </div>
 
-                        
-                
-
-
-
-
-
                             
             </div>
       
@@ -169,7 +162,7 @@
     function myFunction() {
         window.print();
     }
-    var magnitudeChart = dc.lineChart("#dc-magnitude-chart");
+    var magnitudeChart = dc.compositeChart("#dc-magnitude-chart");
 
 
    
@@ -191,35 +184,73 @@
 
         var facts = crossfilter(data);
 
-        monDimension = facts.dimension(function(d) {
+     monDimension = facts.dimension(function(d) {
             return d.date;
         })
+
+     numofyears = monDimension.group().reduceCount(function(d) {
+        return d.date1;
+     });
+
+     
+
         numofPatrons = monDimension.group().reduceCount(function(d) {
             return d.patrons;
         });
         
+        
           yearDimension = facts.dimension(function(d) {
-            return d.date1;
+            return numofyears;
         })
 
-          numofPatrons1 = yearDimension.group().reduceCount(function(d) {
-            return d.patrons;
+          numofPatrons1 = yearDimension.group().reduceCount(function(d) { 
+            return numofPatrons;
+        });
+
+          numofPatrons2 = yearDimension.group().reduceSum(function(d) { 
+            return numofPatrons;
+        });
+     
+          numofPatrons3 = yearDimension.group().reduceSum(function(d) { 
+            return numofPatrons;
+        });
+
+
+          group1 = monDimension.group().reduceCount(function(d) { return numofPatrons1;
+        });
+
+          group2 = monDimension.group().reduceCount(function(d) { return numofPatrons2;
+        });
+
+          group3 = monDimension.group().reduceCount(function(d) { return numofPatrons3;
         });
 
 
 
       
-          magnitudeChart
-            .width(500)
-            .height(400)
-            .x(d3.scale.ordinal()) 
-            .xUnits(dc.units.ordinal)
-            .brushOn(false)
-            .yAxisLabel("student Hall usage")
-            .dimension(monDimension)
-            .group(numofPatrons)
-           
-      
+    magnitudeChart.width(400)
+    .height(300)
+    .margins({ top: 10, right: 10, bottom: 20, left: 40 })
+    .dimension(monDimension)
+    .transitionDuration(500)
+    .elasticY(true)
+    .brushOn(false)
+    .valueAccessor(function (d) {
+        return d.value;
+    })
+    .title(function (d) {
+        return "\nNumber of Povetry: " + d.key;
+
+    })
+    .x(d3.scale.linear().domain([2011,2014])) 
+           // .xUnits(dc.units.ordinal)
+    .compose([
+        dc.lineChart(magnitudeChart).group(numofPatrons1),
+        dc.lineChart(magnitudeChart).group(numofPatrons2),
+        dc.lineChart(magnitudeChart).group(numofPatrons3)
+
+        ])
+      ;
 
         dc.renderAll();
 

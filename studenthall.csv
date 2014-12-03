@@ -1,4 +1,4 @@
-Id,StartDate,StartTime,EndDate,End Time,Duration,Entered by,Notes,Name,PatronStatus,Institution,Program,Program (Other)
+Id,StartDate,StartTime,EndDate,End Time,Duration,Entered by,Notes,Name,PatronStatus,Institution,Program,ProgramOther
 7277526,23-Oct-14,22:42,23-Oct-14,,,Steven Salas,,Scott Hirabayashi,Grad,University of Maryland at College Park (UMCP),Education,
 7277453,23-Oct-14,22:30,23-Oct-14,,,Steven Salas,,Grace Yoo,Undergrad,University of Maryland at College Park (UMCP),Other,
 7277409,23-Oct-14,22:18,23-Oct-14,,,Steven Salas,,Ronald Lamb,Undergrad,"University of Maryland, University College (UMUC)",Business,
